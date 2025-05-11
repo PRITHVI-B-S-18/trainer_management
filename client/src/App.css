@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-maroon: #7B2850;
+  --color-darkMaroon: #6E2145; 
+}
