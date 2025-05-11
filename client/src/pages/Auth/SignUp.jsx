@@ -1,9 +1,55 @@
+import { useState } from "react";
 import Auth_image from "../../assets/Auth_image.png";
 import company_logo from "../../assets/company_logo.png";
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signup } from "../../actions/auth.js";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name || !email || !password || !confirmPassword) {
+      toast.error("Enter all fields", {
+        position: "top-center",
+        autoClose: 2000,
+        theme: "dark",
+      });
+      return;
+    }
+    if (password != confirmPassword) {
+      toast.error("Password mismatch", {
+        position: "top-center",
+        autoClose: 2000,
+        theme: "dark",
+      });
+      return;
+    }
+    //Sending the data
+    dispatch(
+      signup(
+        {
+          name,
+          email,
+          password,
+          confirmPassword,
+        },
+        navigate
+      )
+    );
+  };
+
   return (
     <div className="flex h-screen w-screen">
+      <ToastContainer />
       <div className="w-6/12 h-full">
         <img src={Auth_image} className="h-full w-full" alt="Auth_image" />
       </div>
@@ -47,7 +93,7 @@ const SignUp = () => {
           </div>
 
           {/* Sign Up Form */}
-          <div className="space-y-4">
+          <div className="text-black space-y-4">
             {/* Username Input */}
             <div>
               <label
@@ -57,6 +103,8 @@ const SignUp = () => {
                 Username
               </label>
               <input
+                onChange={(e) => setName(e.target.value)}
+                value={name}
                 type="text"
                 id="username"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
@@ -74,6 +122,8 @@ const SignUp = () => {
                 Email
               </label>
               <input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 type="email"
                 id="email"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
@@ -91,6 +141,8 @@ const SignUp = () => {
                 Password
               </label>
               <input
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 type="password"
                 id="password"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
@@ -108,6 +160,8 @@ const SignUp = () => {
                 Confirm Password
               </label>
               <input
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={confirmPassword}
                 type="password"
                 id="confirmPassword"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none"
@@ -123,6 +177,7 @@ const SignUp = () => {
               style={{ backgroundColor: "#8A2F5B" }}
               onMouseOver={(e) => (e.target.style.backgroundColor = "#7B2850")}
               onMouseOut={(e) => (e.target.style.backgroundColor = "#8A2F5B")}
+              onClick={handleSubmit}
             >
               Register
             </button>

@@ -1,7 +1,41 @@
+import { useState } from "react";
 import Auth_image from "../../assets/Auth_image.png";
 import company_logo from "../../assets/company_logo.png";
+import { ToastContainer, toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../actions/auth.js";
 
 const Login = () => {
+  const dispatch = useDispatch();
+    const navigate = useNavigate();
+  
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+  
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (!email || !password) {
+        toast.error("Enter all fields", {
+          position: "top-center",
+          autoClose: 2000,
+          theme: "dark",
+        });
+        return;
+      }
+      //Sending the data
+      dispatch(
+        login(
+          {
+            email,
+            password
+          },
+          navigate
+        )
+      );
+    };
+
+
   return (
     <div className="flex h-screen w-screen">
       <div className="w-6/12 h-full">
@@ -53,12 +87,14 @@ const Login = () => {
             or Sign in with Email
           </div>
 
-          <form className="space-y-5">
+          <form className="text-black space-y-5">
             <div>
               <label for="email" className="block text-sm text-gray-600 mb-2">
                 Email
               </label>
               <input
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
                 type="email"
                 id="email"
                 placeholder="user@iamneo.ai"
@@ -74,6 +110,8 @@ const Login = () => {
                 Password
               </label>
               <input
+              onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 type="password"
                 id="password"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-maroon"
@@ -105,6 +143,7 @@ const Login = () => {
               style={{ backgroundColor: "#7B2850" }}
               onMouseOver={(e) => (e.target.style.backgroundColor = "#6E2145")}
               onMouseOut={(e) => (e.target.style.backgroundColor = "#7B2850")}
+              onClick={handleSubmit}
             >
               Login
             </button>
