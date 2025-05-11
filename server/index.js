@@ -13,7 +13,7 @@ app.use(cors());
 dotenv.config();
 
 app.get('/', (req, res) => {
-    res.send("This is the trainer management server");
+    res.send("This is the trainer management server app");
 });
 app.use("/user", userRouter);
 
